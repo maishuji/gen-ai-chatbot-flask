@@ -10,16 +10,24 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 # Keeping track of conversation history
 conversation_history = []
 
-history_string = "\n".join(conversation_history)
+while True:
+    #Press ctrl-c to exit the conversation 
+    
+    history_string = "\n".join(conversation_history)
 
-input_text ="hello, how are you doing?"
+    input_text = input("> ")
 
-inputs = tokenizer.encode_plus(history_string, input_text, return_tensors="pt")
-print(inputs)
-print(tokenizer.pretrained_vocab_files_map)
+    inputs = tokenizer.encode_plus(history_string, input_text, return_tensors="pt")
+    print(inputs)
+    print(tokenizer.pretrained_vocab_files_map)
 
-outputs = model.generate(**inputs)
-print(outputs) # A dictionary containing the generated tokens ( not text)
+    outputs = model.generate(**inputs)
+    print(outputs) # A dictionary containing the generated tokens ( not text)
 
-response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
-print(response)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
+    print(response)
+
+    # Update conversation history
+    conversation_history.append(input_text)
+    conversation_history.append(response)
+    print(conversation_history)
